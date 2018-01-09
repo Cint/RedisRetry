@@ -12,6 +12,10 @@ namespace RedisRetry
 
         public RedisRetryDatabase(IDatabase database)
         {
+            if (database.GetType() == typeof(RedisRetryDatabase))
+            {
+                throw new ArgumentException("can not be of type RedisRetryDatabase", nameof(database));
+            }
             _database = database;
         }
 
@@ -103,82 +107,82 @@ namespace RedisRetry
         public Task<GeoRadiusResult[]> GeoRadiusAsync(RedisKey key, double longitude, double latitude, double radius, GeoUnit unit = GeoUnit.Meters, int count = -1, Order? order = null, GeoRadiusOptions options = GeoRadiusOptions.Default, CommandFlags flags = CommandFlags.None)
             => _database.GeoRadiusAsync(key, longitude, latitude, radius, unit, count, order, options, flags);
 
-        public bool GeoRemove(RedisKey key, RedisValue member, CommandFlags flags = CommandFlags.None) 
+        public bool GeoRemove(RedisKey key, RedisValue member, CommandFlags flags = CommandFlags.None)
             => _database.GeoRemove(key, member, flags);
 
-        public Task<bool> GeoRemoveAsync(RedisKey key, RedisValue member, CommandFlags flags = CommandFlags.None) 
+        public Task<bool> GeoRemoveAsync(RedisKey key, RedisValue member, CommandFlags flags = CommandFlags.None)
             => _database.GeoRemoveAsync(key, member, flags);
 
-        public long HashDecrement(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None) 
+        public long HashDecrement(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None)
             => _database.HashDecrement(key, hashField, value, flags);
 
-        public double HashDecrement(RedisKey key, RedisValue hashField, double value, CommandFlags flags = CommandFlags.None) 
+        public double HashDecrement(RedisKey key, RedisValue hashField, double value, CommandFlags flags = CommandFlags.None)
             => _database.HashDecrement(key, hashField, value, flags);
 
-        public Task<long> HashDecrementAsync(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None) 
+        public Task<long> HashDecrementAsync(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None)
             => _database.HashDecrementAsync(key, hashField, value, flags);
 
-        public Task<double> HashDecrementAsync(RedisKey key, RedisValue hashField, double value, CommandFlags flags = CommandFlags.None) 
+        public Task<double> HashDecrementAsync(RedisKey key, RedisValue hashField, double value, CommandFlags flags = CommandFlags.None)
             => _database.HashDecrementAsync(key, hashField, value, flags);
 
-        public bool HashDelete(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None) 
+        public bool HashDelete(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None)
             => _database.HashDelete(key, hashField, flags);
 
-        public long HashDelete(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None) 
+        public long HashDelete(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None)
             => _database.HashDelete(key, hashFields, flags);
 
-        public Task<bool> HashDeleteAsync(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None) 
+        public Task<bool> HashDeleteAsync(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None)
             => _database.HashDeleteAsync(key, hashField, flags);
 
-        public Task<long> HashDeleteAsync(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None) 
+        public Task<long> HashDeleteAsync(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None)
             => _database.HashDeleteAsync(key, hashFields, flags);
 
-        public bool HashExists(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None) 
+        public bool HashExists(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None)
             => _database.HashExists(key, hashField, flags);
 
-        public Task<bool> HashExistsAsync(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None) 
+        public Task<bool> HashExistsAsync(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None)
             => _database.HashExistsAsync(key, hashField, flags);
 
-        public RedisValue HashGet(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None) 
+        public RedisValue HashGet(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None)
             => _database.HashGet(key, hashField, flags);
 
-        public RedisValue[] HashGet(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None) 
+        public RedisValue[] HashGet(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None)
             => _database.HashGet(key, hashFields, flags);
 
-        public HashEntry[] HashGetAll(RedisKey key, CommandFlags flags = CommandFlags.None) 
+        public HashEntry[] HashGetAll(RedisKey key, CommandFlags flags = CommandFlags.None)
             => _database.HashGetAll(key, flags);
 
-        public Task<HashEntry[]> HashGetAllAsync(RedisKey key, CommandFlags flags = CommandFlags.None) 
+        public Task<HashEntry[]> HashGetAllAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
             => _database.HashGetAllAsync(key, flags);
 
-        public Task<RedisValue> HashGetAsync(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None) 
-            => _database.HashGetAsync(key, hashField, flags);
+        public Task<RedisValue> HashGetAsync(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None)
+            => _database.HashGetAsyncWithRetries(key, hashField, flags);
 
-        public Task<RedisValue[]> HashGetAsync(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None) 
-            => _database.HashGetAsync(key, hashFields, flags);
+        public Task<RedisValue[]> HashGetAsync(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None)
+            => _database.HashGetAsyncWithRetries(key, hashFields, flags);
 
-        public long HashIncrement(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None) 
+        public long HashIncrement(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None)
             => _database.HashIncrement(key, hashField, value, flags);
 
-        public double HashIncrement(RedisKey key, RedisValue hashField, double value, CommandFlags flags = CommandFlags.None) 
+        public double HashIncrement(RedisKey key, RedisValue hashField, double value, CommandFlags flags = CommandFlags.None)
             => _database.HashIncrement(key, hashField, value, flags);
 
-        public Task<long> HashIncrementAsync(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None) 
+        public Task<long> HashIncrementAsync(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None)
             => _database.HashIncrementAsync(key, hashField, value);
 
-        public Task<double> HashIncrementAsync(RedisKey key, RedisValue hashField, double value, CommandFlags flags = CommandFlags.None) 
+        public Task<double> HashIncrementAsync(RedisKey key, RedisValue hashField, double value, CommandFlags flags = CommandFlags.None)
             => _database.HashIncrementAsync(key, hashField, value, flags);
 
-        public RedisValue[] HashKeys(RedisKey key, CommandFlags flags = CommandFlags.None) 
+        public RedisValue[] HashKeys(RedisKey key, CommandFlags flags = CommandFlags.None)
             => _database.HashKeys(key, flags);
 
-        public Task<RedisValue[]> HashKeysAsync(RedisKey key, CommandFlags flags = CommandFlags.None) 
+        public Task<RedisValue[]> HashKeysAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
             => _database.HashKeysAsync(key, flags);
 
-        public long HashLength(RedisKey key, CommandFlags flags = CommandFlags.None) 
+        public long HashLength(RedisKey key, CommandFlags flags = CommandFlags.None)
             => _database.HashLength(key, flags);
 
-        public Task<long> HashLengthAsync(RedisKey key, CommandFlags flags = CommandFlags.None) 
+        public Task<long> HashLengthAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
             => _database.HashLengthAsync(key, flags);
 
         public IEnumerable<HashEntry> HashScan(RedisKey key, RedisValue pattern, int pageSize, CommandFlags flags)
@@ -849,13 +853,13 @@ namespace RedisRetry
         public Task<RedisValue> StringSetRangeAsync(RedisKey key, long offset, RedisValue value, CommandFlags flags = CommandFlags.None)
             => _database.StringSetRangeAsync(key, offset, value, flags);
 
-        public bool TryWait(Task task) 
+        public bool TryWait(Task task)
             => _database.TryWait(task);
 
-        public void Wait(Task task) 
+        public void Wait(Task task)
             => _database.Wait(task);
 
-        public T Wait<T>(Task<T> task) 
+        public T Wait<T>(Task<T> task)
             => _database.Wait(task);
 
         public void WaitAll(params Task[] tasks)

@@ -21,9 +21,9 @@ namespace RedisRetry.Test
         private long stop,end = 1337;
         private DateTime? expiry = DateTime.UtcNow.AddHours(3);
         private TimeSpan? timespan = TimeSpan.FromMinutes(18);
-        CommandFlags flags = CommandFlags.HighPriority;
-        When when = When.NotExists;
-        Order order = Order.Descending;
+        private CommandFlags flags = CommandFlags.HighPriority;
+        private When when = When.NotExists;
+        private Order order = Order.Descending;
 
         [Fact]
         public void HashSetAsyncWithRetries()
