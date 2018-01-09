@@ -4,7 +4,7 @@ using StackExchange.Redis;
 
 namespace RedisRetry
 {
-    public static class RedisConnectionExtensions
+    public static class RedisDatabaseExtension
     {
         public static Task<bool> HashSetAsyncWithRetries(this IDatabase database, RedisKey key, RedisValue hashField, RedisValue value, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
@@ -52,16 +52,6 @@ namespace RedisRetry
         }
 
         public static Task<RedisValue[]> HashGetAsyncWithRetries(this IDatabase database, RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None)
-        {
-            return new RetryTask<RedisValue[]>(() => database.HashGetAsync(key, hashFields, flags)).RunAsync();
-        }
-
-        public static Task<RedisValue> HashGetAsyncWithRetries(this IDatabaseAsync database, RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None)
-        {
-            return new RetryTask<RedisValue>(() => database.HashGetAsync(key, hashField, flags)).RunAsync();
-        }
-
-        public static Task<RedisValue[]> HashGetAsyncWithRetries(this IDatabaseAsync database, RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None)
         {
             return new RetryTask<RedisValue[]>(() => database.HashGetAsync(key, hashFields, flags)).RunAsync();
         }
