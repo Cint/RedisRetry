@@ -1,10 +1,11 @@
 ﻿using System;
 using Polly;
 using System.Threading.Tasks;
+using StackExchange.Redis;
 
 namespace RedisRetry
 {
-    public class RetryTask<T>
+    public class RedisRetryTask<T>
     {
         private readonly Func<Task<T>> _func;
         private static readonly Func<int, TimeSpan> RetryAttemptWaitProvider =
@@ -12,23 +13,20 @@ namespace RedisRetry
 
         private Policy _retryPolicy;
 
-        public RetryTask(Func<Task<T>> func, int retryCount = 3, Func<int, TimeSpan> waitProvider = null)
+        public RedisRetryTask(Func<Task<T>> func, int retryCount = 3, Func<int, TimeSpan> waitProvider = null)
         {
             _func = func;
             _retryPolicy = Policy
-               .Handle<Exception>()
+               .Handle<RedisServerException>()
+               .Or<RedisConnectionException>()
+               .Or<TimeoutException>()
                .WaitAndRetryAsync(retryCount, waitProvider ?? RetryAttemptWaitProvider);
         }
 
         public async Task<T> RunAsync()
         {
-            var res = await _retryPolicy.ExecuteAndCaptureAsync(() => _func())
+            return await _retryPolicy.ExecuteAsync(_func)
                 .ConfigureAwait(false);
-            if (res.Outcome == OutcomeType.Failure)
-            {
-                throw res.FinalException;
-            }
-            return res.Result;
         }
     }
 }

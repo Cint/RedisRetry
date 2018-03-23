@@ -1,6 +1,7 @@
 ﻿using System;
 using Polly;
 using System.Threading.Tasks;
+using StackExchange.Redis;
 
 namespace RedisRetry
 {
@@ -16,18 +17,16 @@ namespace RedisRetry
         {
             _func = func;
             _retryPolicy = Policy
-               .Handle<Exception>()
+               .Handle<RedisServerException>()
+               .Or<RedisConnectionException>()
+               .Or<TimeoutException>()
                .WaitAndRetryAsync(retryCount, waitProvider ?? RetryAttemptWaitProvider);
         }
 
         public async Task RunAsync()
         {
-            var res = await _retryPolicy.ExecuteAndCaptureAsync(() => _func())
+            await _retryPolicy.ExecuteAsync(_func)
                 .ConfigureAwait(false);
-            if (res.Outcome == OutcomeType.Failure)
-            {
-                throw res.FinalException;
-            }
         }
     }
 }

@@ -14,17 +14,17 @@ namespace RedisRetry.Test
 
         private int _callbackCounter = 0;
 
-        private async Task FailingTask(int timesToFail)
+        private async Task FailingTask(int timesToFail, Exception exception)
         {
             await Mock.Of<IDatabase>().StringSetAsync("test", "test");
             _callbackCounter++;
-            if (_callbackCounter <= timesToFail) throw new Exception();
+            if (_callbackCounter <= timesToFail) throw exception;
         }
 
         [Fact]
         public async Task RetryTask_works_with_no_exceptions()
         {
-            var task = new RetryTask(() => FailingTask(0));
+            var task = new RetryTask(() => FailingTask(0, new TimeoutException()));
             await task.RunAsync();
             _callbackCounter.ShouldBe(1);
         }
@@ -32,7 +32,7 @@ namespace RedisRetry.Test
         [Fact]
         public async Task RetryTask_works_with_exception()
         {
-            var task = new RetryTask(() => FailingTask(1), 3, noWaitProvider);
+            var task = new RetryTask(() => FailingTask(1, new TimeoutException()), 3, noWaitProvider);
             await task.RunAsync();
             _callbackCounter.ShouldBe(2);
         }
@@ -40,9 +40,17 @@ namespace RedisRetry.Test
         [Fact]
         public async Task RetryTask_fails_after_four_exceptions()
         {
-            var task = new RetryTask(() => FailingTask(4), 3, noWaitProvider);
-            await task.RunAsync().ShouldThrowAsync<Exception>();
+            var task = new RetryTask(() => FailingTask(4, new TimeoutException()), 3, noWaitProvider);
+            await task.RunAsync().ShouldThrowAsync<TimeoutException>();
             _callbackCounter.ShouldBe(4);
+        }
+
+        [Fact]
+        public async Task RetryTask_does_not_retry_non_transient_exceptions()
+        {
+            var task = new RetryTask(() => FailingTask(4, new ArgumentNullException()), 3, noWaitProvider);
+            await task.RunAsync().ShouldThrowAsync<ArgumentNullException>();
+            _callbackCounter.ShouldBe(1);
         }
     }
 }

@@ -8,12 +8,12 @@ namespace RedisRetry
     {
         public static Task<bool> ExecuteAsyncWithRetries(this ITransaction transaction, CommandFlags flags = CommandFlags.None, int retryCount = 3)
         {
-            return new RetryTask<bool>(() => transaction.ExecuteAsync(flags), retryCount).RunAsync();
+            return new RedisRetryTask<bool>(() => transaction.ExecuteAsync(flags), retryCount).RunAsync();
         }
 
         public static Task<RedisResult> ExecuteAsyncWithRetries(this ITransaction transaction, string command, ICollection<object> args, CommandFlags flags = CommandFlags.None, int retryCount = 3)
         {
-            return new RetryTask<RedisResult>(() => transaction.ExecuteAsync(command, args, flags), retryCount).RunAsync();
+            return new RedisRetryTask<RedisResult>(() => transaction.ExecuteAsync(command, args, flags), retryCount).RunAsync();
         }
     }
 }
