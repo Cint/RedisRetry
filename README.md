@@ -7,4 +7,4 @@ A simple retry wrapper for [StackExchange.Redis](https://github.com/StackExchang
 
 RedisRetry is a library that you can add to your project that will extend your `IDatabase` interface.
 
-It provides retry functionality (using [Polly](https://github.com/App-vNext/Polly]) for common Redis commands.
+It provides retry functionality (using [Polly](https://github.com/App-vNext/Polly)) for common Redis commands.
