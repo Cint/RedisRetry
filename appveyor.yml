@@ -8,7 +8,7 @@ before_build:
     #- dotnet restore RedisRetry.sln
     - cmd: dotnet restore RedisRetry.sln --verbosity m
 build_script:
-    - cmd: dotnet pack --output ../../artifacts src/RedisRetry/RedisRetry.csproj
+    - cmd: dotnet pack -c Release --output ../../artifacts src/RedisRetry/RedisRetry.csproj
 test_script:
   - cmd: dotnet test test/RedisRetry.Test/RedisRetry.Test.csproj
 artifacts:
