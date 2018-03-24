@@ -15,12 +15,17 @@ namespace RedisRetry.Test
         private RedisKey key = new RedisKey();
         private RedisKey[] keys = new RedisKey[] { new RedisKey() };
         private RedisValue value = new RedisValue();
+        private SortedSetEntry[] entries = new SortedSetEntry[] { new SortedSetEntry() };
         private RedisValue member = new RedisValue();
         private RedisValue[] values = new RedisValue[] { new RedisValue() };
         private double dValue = 0.28;
         private long lValue = 1234567890;
         private RedisValue hashField = new RedisValue();
         private HashEntry[] hashFields = new HashEntry[] { new HashEntry() };
+        private int take = 37;
+        private int skip = 14;
+        private double min = 1.18;
+        private double max = 390.18;
         private long start = 3;
         private long stop, end = 1337;
         private DateTime? expiry = DateTime.UtcNow.AddHours(3);
@@ -28,6 +33,7 @@ namespace RedisRetry.Test
         private CommandFlags flags = CommandFlags.DemandSlave;
         private When when = When.Exists;
         private Order order = Order.Descending;
+        Exclude exclude = Exclude.Both;
 
         public RedisRetryDatabaseSpec()
         {
@@ -257,6 +263,274 @@ namespace RedisRetry.Test
 
             await retryDb.HyperLogLogLengthAsync(keys);
             database.Verify(d => d.HyperLogLogLengthAsync(keys, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetAddAsync()
+        {
+            await retryDb.SortedSetAddAsync(key, entries, when, flags);
+            database.Verify(d => d.SortedSetAddAsync(key, entries, when, flags), Times.Once);
+
+            await retryDb.SortedSetAddAsync(key, entries, flags);
+            database.Verify(d => d.SortedSetAddAsync(key, entries, flags), Times.Once);
+
+            await retryDb.SortedSetAddAsync(key, entries);
+            database.Verify(d => d.SortedSetAddAsync(key, entries, When.Always, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetAddAsync(key, value, dValue, when, flags);
+            database.Verify(d => d.SortedSetAddAsync(key, value, dValue, when, flags), Times.Once);
+
+            await retryDb.SortedSetAddAsync(key, value, dValue, when);
+            database.Verify(d => d.SortedSetAddAsync(key, value, dValue, when, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetAddAsync(key, value, dValue);
+            database.Verify(d => d.SortedSetAddAsync(key, value, dValue, When.Always, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetDecrementAsync()
+        {
+            await retryDb.SortedSetDecrementAsync(key, value, dValue, flags);
+            database.Verify(d => d.SortedSetDecrementAsync(key, value, dValue, flags), Times.Once);
+
+            await retryDb.SortedSetDecrementAsync(key, value, dValue);
+            database.Verify(d => d.SortedSetDecrementAsync(key, value, dValue, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetIncrementAsync()
+        {
+            await retryDb.SortedSetIncrementAsync(key, value, dValue, flags);
+            database.Verify(d => d.SortedSetIncrementAsync(key, value, dValue, flags), Times.Once);
+
+            await retryDb.SortedSetIncrementAsync(key, value, dValue);
+            database.Verify(d => d.SortedSetIncrementAsync(key, value, dValue, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetLengthAsync()
+        {
+            await retryDb.SortedSetLengthAsync(key, min, max, exclude, flags);
+            database.Verify(d => d.SortedSetLengthAsync(key, min, max, exclude, flags), Times.Once);
+
+            await retryDb.SortedSetLengthAsync(key, min, max, exclude);
+            database.Verify(d => d.SortedSetLengthAsync(key, min, max, exclude, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetLengthAsync(key, min, max);
+            database.Verify(d => d.SortedSetLengthAsync(key, min, max, Exclude.None, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetLengthAsync(key, min);
+            database.Verify(d => d.SortedSetLengthAsync(key, min, Double.PositiveInfinity, Exclude.None, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetLengthAsync(key);
+            database.Verify(d => d.SortedSetLengthAsync(key, Double.NegativeInfinity, Double.PositiveInfinity, Exclude.None, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetLengthByValueAsync()
+        {
+            await retryDb.SortedSetLengthByValueAsync(key, min, max, exclude, flags);
+            database.Verify(d => d.SortedSetLengthByValueAsync(key, min, max, exclude, flags), Times.Once);
+
+            await retryDb.SortedSetLengthByValueAsync(key, min, max, exclude);
+            database.Verify(d => d.SortedSetLengthByValueAsync(key, min, max, exclude, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetLengthByValueAsync(key, min, max);
+            database.Verify(d => d.SortedSetLengthByValueAsync(key, min, max, Exclude.None, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetRangeByRankAsync()
+        {
+            await retryDb.SortedSetRangeByRankAsync(key, start, stop, order, flags);
+            database.Verify(d => d.SortedSetRangeByRankAsync(key, start, stop, order, flags), Times.Once);
+
+            await retryDb.SortedSetRangeByRankAsync(key, start, stop, order);
+            database.Verify(d => d.SortedSetRangeByRankAsync(key, start, stop, order, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByRankAsync(key, start, stop);
+            database.Verify(d => d.SortedSetRangeByRankAsync(key, start, stop, Order.Ascending, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByRankAsync(key, start);
+            database.Verify(d => d.SortedSetRangeByRankAsync(key, start, -1, Order.Ascending, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByRankAsync(key);
+            database.Verify(d => d.SortedSetRangeByRankAsync(key, 0, -1, Order.Ascending, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetRangeByRankWithScoresAsync()
+        {
+            await retryDb.SortedSetRangeByRankWithScoresAsync(key, start, stop, order, flags);
+            database.Verify(d => d.SortedSetRangeByRankWithScoresAsync(key, start, stop, order, flags), Times.Once);
+
+            await retryDb.SortedSetRangeByRankWithScoresAsync(key, start, stop, order);
+            database.Verify(d => d.SortedSetRangeByRankWithScoresAsync(key, start, stop, order, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByRankWithScoresAsync(key, start, stop);
+            database.Verify(d => d.SortedSetRangeByRankWithScoresAsync(key, start, stop, Order.Ascending, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByRankWithScoresAsync(key, start);
+            database.Verify(d => d.SortedSetRangeByRankWithScoresAsync(key, start, -1, Order.Ascending, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByRankWithScoresAsync(key);
+            database.Verify(d => d.SortedSetRangeByRankWithScoresAsync(key, 0, -1, Order.Ascending, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetRangeByScoreAsync()
+        {
+            await retryDb.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, skip, take, flags);
+            database.Verify(d => d.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, skip, take, flags), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, skip, take);
+            database.Verify(d => d.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, skip, take, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, skip);
+            database.Verify(d => d.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, skip, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreAsync(key, start, stop, exclude, order);
+            database.Verify(d => d.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreAsync(key, start, stop, exclude);
+            database.Verify(d => d.SortedSetRangeByScoreAsync(key, start, stop, exclude, Order.Ascending, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreAsync(key, start, stop);
+            database.Verify(d => d.SortedSetRangeByScoreAsync(key, start, stop, Exclude.None, Order.Ascending, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreAsync(key, start);
+            database.Verify(d => d.SortedSetRangeByScoreAsync(key, start, Double.PositiveInfinity, Exclude.None, Order.Ascending, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreAsync(key);
+            database.Verify(d => d.SortedSetRangeByScoreAsync(key, Double.NegativeInfinity, Double.PositiveInfinity, Exclude.None, Order.Ascending, 0, -1, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetRangeByScoreWithScoresAsync()
+        {
+            await retryDb.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, order, skip, take, flags);
+            database.Verify(d => d.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, order, skip, take, flags), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, order, skip, take);
+            database.Verify(d => d.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, order, skip, take, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, order, skip);
+            database.Verify(d => d.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, order, skip, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, order);
+            database.Verify(d => d.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, order, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude);
+            database.Verify(d => d.SortedSetRangeByScoreWithScoresAsync(key, start, stop, exclude, Order.Ascending, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreWithScoresAsync(key, start, stop);
+            database.Verify(d => d.SortedSetRangeByScoreWithScoresAsync(key, start, stop, Exclude.None, Order.Ascending, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreWithScoresAsync(key, start);
+            database.Verify(d => d.SortedSetRangeByScoreWithScoresAsync(key, start, Double.PositiveInfinity, Exclude.None, Order.Ascending, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByScoreWithScoresAsync(key);
+            database.Verify(d => d.SortedSetRangeByScoreWithScoresAsync(key, Double.NegativeInfinity, Double.PositiveInfinity, Exclude.None, Order.Ascending, 0, -1, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetRangeByValueAsync()
+        {
+            await retryDb.SortedSetRangeByValueAsync(key, min, max, exclude, skip, take, flags);
+            database.Verify(d => d.SortedSetRangeByValueAsync(key, min, max, exclude, skip, take, flags), Times.Once);
+
+            await retryDb.SortedSetRangeByValueAsync(key, min, max, exclude, skip, take);
+            database.Verify(d => d.SortedSetRangeByValueAsync(key, min, max, exclude, skip, take, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByValueAsync(key, min, max, exclude, skip);
+            database.Verify(d => d.SortedSetRangeByValueAsync(key, min, max, exclude, skip, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByValueAsync(key, min, max, exclude);
+            database.Verify(d => d.SortedSetRangeByValueAsync(key, min, max, exclude, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByValueAsync(key, min, max);
+            database.Verify(d => d.SortedSetRangeByValueAsync(key, min, max, Exclude.None, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByValueAsync(key, min);
+            database.Verify(d => d.SortedSetRangeByValueAsync(key, min, default(RedisValue), Exclude.None, 0, -1, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRangeByValueAsync(key);
+            database.Verify(d => d.SortedSetRangeByValueAsync(key, default(RedisValue), default(RedisValue), Exclude.None, 0, -1, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetRankAsync()
+        {
+            await retryDb.SortedSetRankAsync(key,value, order, flags);
+            database.Verify(d => d.SortedSetRankAsync(key, value, order, flags), Times.Once);
+
+            await retryDb.SortedSetRankAsync(key, value, order);
+            database.Verify(d => d.SortedSetRankAsync(key, value, order, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRankAsync(key, value);
+            database.Verify(d => d.SortedSetRankAsync(key, value, Order.Ascending, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetRemoveAsync()
+        {
+            await retryDb.SortedSetRemoveAsync(key, value, flags);
+            database.Verify(d => d.SortedSetRemoveAsync(key, value, flags), Times.Once);
+
+            await retryDb.SortedSetRemoveAsync(key, value);
+            database.Verify(d => d.SortedSetRemoveAsync(key, value, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRemoveAsync(key, values, flags);
+            database.Verify(d => d.SortedSetRemoveAsync(key, values, flags), Times.Once);
+
+            await retryDb.SortedSetRemoveAsync(key, values);
+            database.Verify(d => d.SortedSetRemoveAsync(key, values, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetRemoveRangeByRankAsync()
+        {
+            await retryDb.SortedSetRemoveRangeByRankAsync(key, start, stop, flags);
+            database.Verify(d => d.SortedSetRemoveRangeByRankAsync(key, start, stop, flags), Times.Once);
+
+            await retryDb.SortedSetRemoveRangeByRankAsync(key, start, stop);
+            database.Verify(d => d.SortedSetRemoveRangeByRankAsync(key, start, stop, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetRemoveRangeByScoreAsync()
+        {
+            await retryDb.SortedSetRemoveRangeByScoreAsync(key, start, stop, exclude, flags);
+            database.Verify(d => d.SortedSetRemoveRangeByScoreAsync(key, start, stop, exclude, flags), Times.Once);
+
+            await retryDb.SortedSetRemoveRangeByScoreAsync(key, start, stop, exclude);
+            database.Verify(d => d.SortedSetRemoveRangeByScoreAsync(key, start, stop, exclude, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRemoveRangeByScoreAsync(key, start, stop);
+            database.Verify(d => d.SortedSetRemoveRangeByScoreAsync(key, start, stop, Exclude.None, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetRemoveRangeByValueAsync()
+        {
+            await retryDb.SortedSetRemoveRangeByValueAsync(key, min, max, exclude, flags);
+            database.Verify(d => d.SortedSetRemoveRangeByValueAsync(key, min, max, exclude, flags), Times.Once);
+
+            await retryDb.SortedSetRemoveRangeByValueAsync(key, min, max, exclude);
+            database.Verify(d => d.SortedSetRemoveRangeByValueAsync(key, min, max, exclude, CommandFlags.None), Times.Once);
+
+            await retryDb.SortedSetRemoveRangeByValueAsync(key, min, max);
+            database.Verify(d => d.SortedSetRemoveRangeByValueAsync(key, min, max, Exclude.None, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task SortedSetScoreAsync()
+        {
+            await retryDb.SortedSetScoreAsync(key, value, flags);
+            database.Verify(d => d.SortedSetScoreAsync(key, value, flags), Times.Once);
+
+            await retryDb.SortedSetScoreAsync(key, value);
+            database.Verify(d => d.SortedSetScoreAsync(key, value, CommandFlags.None), Times.Once);
         }
     }
 }
