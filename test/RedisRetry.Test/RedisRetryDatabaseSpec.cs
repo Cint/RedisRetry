@@ -210,5 +210,53 @@ namespace RedisRetry.Test
             await retryDb.KeyDeleteAsync(keys);
             database.Verify(d => d.KeyDeleteAsync(keys, CommandFlags.None), Times.Once);
         }
+
+        [Fact]
+        public async Task HyperLogLogAddAsync()
+        {
+            await retryDb.HyperLogLogAddAsync(key, value, flags);
+            database.Verify(d => d.HyperLogLogAddAsync(key, value, flags), Times.Once);
+
+            await retryDb.HyperLogLogAddAsync(key, value);
+            database.Verify(d => d.HyperLogLogAddAsync(key, value, CommandFlags.None), Times.Once);
+
+            await retryDb.HyperLogLogAddAsync(key, values, flags);
+            database.Verify(d => d.HyperLogLogAddAsync(key, values, flags), Times.Once);
+
+            await retryDb.HyperLogLogAddAsync(key, values);
+            database.Verify(d => d.HyperLogLogAddAsync(key, values, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task HyperLogLogMergeAsync()
+        {
+            await retryDb.HyperLogLogMergeAsync(key, keys, flags);
+            database.Verify(d => d.HyperLogLogMergeAsync(key, keys, flags), Times.Once);
+
+            await retryDb.HyperLogLogMergeAsync(key, keys);
+            database.Verify(d => d.HyperLogLogMergeAsync(key, keys, CommandFlags.None), Times.Once);
+
+            await retryDb.HyperLogLogMergeAsync(key, key, key, flags);
+            database.Verify(d => d.HyperLogLogMergeAsync(key, key, key, flags), Times.Once);
+
+            await retryDb.HyperLogLogMergeAsync(key, key, key);
+            database.Verify(d => d.HyperLogLogMergeAsync(key, key, key, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task HyperLogLogLengthAsync()
+        {
+            await retryDb.HyperLogLogLengthAsync(key, flags);
+            database.Verify(d => d.HyperLogLogLengthAsync(key, flags), Times.Once);
+
+            await retryDb.HyperLogLogLengthAsync(key);
+            database.Verify(d => d.HyperLogLogLengthAsync(key, CommandFlags.None), Times.Once);
+
+            await retryDb.HyperLogLogLengthAsync(keys, flags);
+            database.Verify(d => d.HyperLogLogLengthAsync(keys, flags), Times.Once);
+
+            await retryDb.HyperLogLogLengthAsync(keys);
+            database.Verify(d => d.HyperLogLogLengthAsync(keys, CommandFlags.None), Times.Once);
+        }
     }
 }
