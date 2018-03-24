@@ -159,7 +159,56 @@ namespace RedisRetry.Test
             database.Verify(d => d.HashValuesAsync(key, CommandFlags.None), Times.Once);
         }
 
+        [Fact]
+        public async Task KeyDumpAsync()
+        {
+            await retryDb.KeyDumpAsync(key, flags);
+            database.Verify(d => d.KeyDumpAsync(key, flags), Times.Once);
 
+            await retryDb.KeyDumpAsync(key);
+            database.Verify(d => d.KeyDumpAsync(key, CommandFlags.None), Times.Once);
+        }
 
+        [Fact]
+        public async Task KeyExistsAsync()
+        {
+            await retryDb.KeyExistsAsync(key, flags);
+            database.Verify(d => d.KeyExistsAsync(key, flags), Times.Once);
+
+            await retryDb.KeyExistsAsync(key);
+            database.Verify(d => d.KeyExistsAsync(key, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task KeyExpireAsync()
+        {
+            await retryDb.KeyExpireAsync(key, expiry, flags);
+            database.Verify(d => d.KeyExpireAsync(key, expiry, flags), Times.Once);
+
+            await retryDb.KeyExpireAsync(key, expiry);
+            database.Verify(d => d.KeyExpireAsync(key, expiry, CommandFlags.None), Times.Once);
+
+            await retryDb.KeyExpireAsync(key, timespan, flags);
+            database.Verify(d => d.KeyExpireAsync(key, timespan, flags), Times.Once);
+
+            await retryDb.KeyExpireAsync(key, timespan);
+            database.Verify(d => d.KeyExpireAsync(key, timespan, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task KeyDeleteAsync()
+        {
+            await retryDb.KeyDeleteAsync(key, flags);
+            database.Verify(d => d.KeyDeleteAsync(key, flags), Times.Once);
+
+            await retryDb.KeyDeleteAsync(key);
+            database.Verify(d => d.KeyDeleteAsync(key, CommandFlags.None), Times.Once);
+
+            await retryDb.KeyDeleteAsync(keys, flags);
+            database.Verify(d => d.KeyDeleteAsync(keys, flags), Times.Once);
+
+            await retryDb.KeyDeleteAsync(keys);
+            database.Verify(d => d.KeyDeleteAsync(keys, CommandFlags.None), Times.Once);
+        }
     }
 }
