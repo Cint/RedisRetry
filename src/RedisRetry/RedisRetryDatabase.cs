@@ -168,7 +168,7 @@ namespace RedisRetry
             => _database.HashIncrement(key, hashField, value, flags);
 
         public Task<long> HashIncrementAsync(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None)
-            => _database.HashIncrementAsync(key, hashField, value);
+            => _database.HashIncrementAsync(key, hashField, value, flags);
 
         public Task<double> HashIncrementAsync(RedisKey key, RedisValue hashField, double value, CommandFlags flags = CommandFlags.None)
             => _database.HashIncrementAsync(key, hashField, value, flags);

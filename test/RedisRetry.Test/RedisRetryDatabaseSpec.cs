@@ -50,5 +50,28 @@ namespace RedisRetry.Test
             await retryDb.HashGetAsync(key, values, flags);
             database.Verify(d => d.HashGetAsync(key, values, flags), Times.Once);
         }
+
+        [Fact]
+        public async Task HashSetAsync()
+        {
+            await retryDb.HashSetAsync(key, hashFields, flags);
+            database.Verify(d => d.HashSetAsync(key, hashFields, flags), Times.Once);
+
+            await retryDb.HashSetAsync(key, hashField, value, when, flags);
+            database.Verify(d => d.HashSetAsync(key, hashField, value, when, flags), Times.Once);
+        }
+
+        [Fact]
+        public async Task HashIncrementAsync()
+        {
+            await retryDb.HashIncrementAsync(key, hashField, dValue, flags);
+            database.Verify(d => d.HashIncrementAsync(key, hashField, dValue, flags), Times.Once);
+
+            await retryDb.HashIncrementAsync(key, hashField, lValue, flags);
+            database.Verify(d => d.HashIncrementAsync(key, hashField, lValue, flags), Times.Once);
+
+            await retryDb.HashIncrementAsync(key, hashField);
+            database.Verify(d => d.HashIncrementAsync(key, hashField, 1, CommandFlags.None), Times.Once);
+        }
     }
 }
