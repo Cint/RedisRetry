@@ -1,5 +1,5 @@
 # RedisRetry
-[![Build status](https://ci.appveyor.com/api/projects/status/bkemtm1mb0muvc1o/branch/master?svg=true)](https://ci.appveyor.com/project/Cint/redisretry)
+[![Build status](https://ci.appveyor.com/api/projects/status/bkemtm1mb0muvc1o/branch/master?svg=true)](https://ci.appveyor.com/project/Cint/redisretry/branch/master)
 
 A simple retry wrapper for [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis)
 
