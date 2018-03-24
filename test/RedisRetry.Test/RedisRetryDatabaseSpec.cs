@@ -42,6 +42,32 @@ namespace RedisRetry.Test
         }
 
         [Fact]
+        public async Task HashDeleteAsync()
+        {
+            await retryDb.HashDeleteAsync(key, hashField, flags);
+            database.Verify(d => d.HashDeleteAsync(key, hashField, flags), Times.Once);
+
+            await retryDb.HashDeleteAsync(key, hashField);
+            database.Verify(d => d.HashDeleteAsync(key, hashField, CommandFlags.None), Times.Once);
+
+            await retryDb.HashDeleteAsync(key, values, flags);
+            database.Verify(d => d.HashDeleteAsync(key, values, flags), Times.Once);
+
+            await retryDb.HashDeleteAsync(key, values);
+            database.Verify(d => d.HashDeleteAsync(key, values, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task HashExistsAsync()
+        {
+            await retryDb.HashExistsAsync(key, hashField, flags);
+            database.Verify(d => d.HashExistsAsync(key, hashField, flags), Times.Once);
+
+            await retryDb.HashExistsAsync(key, hashField);
+            database.Verify(d => d.HashExistsAsync(key, hashField, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
         public async Task HashGetAsync()
         {
             await retryDb.HashGetAsync(key, hashField, flags);
@@ -52,6 +78,16 @@ namespace RedisRetry.Test
         }
 
         [Fact]
+        public async Task HashGetAllAsync()
+        {
+            await retryDb.HashGetAllAsync(key, flags);
+            database.Verify(d => d.HashGetAllAsync(key, flags));
+
+            await retryDb.HashGetAllAsync(key);
+            database.Verify(d => d.HashGetAllAsync(key, CommandFlags.None));
+        }
+
+        [Fact]
         public async Task HashSetAsync()
         {
             await retryDb.HashSetAsync(key, hashFields, flags);
@@ -59,6 +95,12 @@ namespace RedisRetry.Test
 
             await retryDb.HashSetAsync(key, hashField, value, when, flags);
             database.Verify(d => d.HashSetAsync(key, hashField, value, when, flags), Times.Once);
+
+            await retryDb.HashSetAsync(key, hashField, value, when);
+            database.Verify(d => d.HashSetAsync(key, hashField, value, when, CommandFlags.None), Times.Once);
+
+            await retryDb.HashSetAsync(key, hashField, value);
+            database.Verify(d => d.HashSetAsync(key, hashField, value, When.Always, CommandFlags.None), Times.Once);
         }
 
         [Fact]
@@ -73,5 +115,51 @@ namespace RedisRetry.Test
             await retryDb.HashIncrementAsync(key, hashField);
             database.Verify(d => d.HashIncrementAsync(key, hashField, 1, CommandFlags.None), Times.Once);
         }
+
+        [Fact]
+        public async Task HashDecrementAsync()
+        {
+            await retryDb.HashDecrementAsync(key, hashField, dValue, flags);
+            database.Verify(d => d.HashDecrementAsync(key, hashField, dValue, flags), Times.Once);
+
+            await retryDb.HashDecrementAsync(key, hashField, lValue, flags);
+            database.Verify(d => d.HashDecrementAsync(key, hashField, lValue, flags), Times.Once);
+
+            await retryDb.HashDecrementAsync(key, hashField);
+            database.Verify(d => d.HashDecrementAsync(key, hashField, 1, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task HashKeysAsync()
+        {
+            await retryDb.HashKeysAsync(key, flags);
+            database.Verify(d => d.HashKeysAsync(key, flags), Times.Once);
+
+            await retryDb.HashKeysAsync(key);
+            database.Verify(d => d.HashKeysAsync(key, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task HashLengthAsync()
+        {
+            await retryDb.HashLengthAsync(key, flags);
+            database.Verify(d => d.HashLengthAsync(key, flags), Times.Once);
+
+            await retryDb.HashLengthAsync(key);
+            database.Verify(d => d.HashLengthAsync(key, CommandFlags.None), Times.Once);
+        }
+
+        [Fact]
+        public async Task HashValuesAsync()
+        {
+            await retryDb.HashValuesAsync(key, flags);
+            database.Verify(d => d.HashValuesAsync(key, flags), Times.Once);
+
+            await retryDb.HashValuesAsync(key);
+            database.Verify(d => d.HashValuesAsync(key, CommandFlags.None), Times.Once);
+        }
+
+
+
     }
 }
