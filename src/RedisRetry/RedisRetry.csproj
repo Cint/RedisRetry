@@ -12,6 +12,7 @@ It provides retry functionality (using Polly) for common Redis commands.</Descri
     <RepositoryUrl>https://github.com/Cint/RedisRetry</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>RedisRetry;Redis;Retry;Polly</PackageTags>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

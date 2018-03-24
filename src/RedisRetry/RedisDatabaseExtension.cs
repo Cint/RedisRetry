@@ -90,10 +90,5 @@ namespace RedisRetry
         {
             return new RedisRetryTask<SortedSetEntry[]>(() => database.SortedSetRangeByRankWithScoresAsync(key, start, stop, order, flags)).RunAsync();
         }
-
-        public static Task<bool> ExecuteAsyncWithRetries(this ITransaction transaction, CommandFlags flags = CommandFlags.None, int retryCount = 3)
-        {
-            return new RedisRetryTask<bool>(() => transaction.ExecuteAsync(flags), retryCount).RunAsync();
-        }
     }
 }
