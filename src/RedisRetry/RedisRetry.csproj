@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.5;net46;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
     <Company>Cint AB</Company>
     <PackageProjectUrl>https://github.com/Cint/RedisRetry</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/Cint/RedisRetry/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Cint AB</Copyright>
     <Description>RedisRetry is a library that you can add to your project that will extend your IDatabase interface.
 It provides retry functionality (using Polly) for common Redis commands.</Description>
@@ -12,12 +12,12 @@ It provides retry functionality (using Polly) for common Redis commands.</Descri
     <RepositoryUrl>https://github.com/Cint/RedisRetry</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>RedisRetry;Redis;Retry;Polly</PackageTags>
-    <Version>1.1.0</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Polly" Version="5.6.1" />
-    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
+    <PackageReference Include="StackExchange.Redis" Version="2.0.601" />
   </ItemGroup>
 
 </Project>
