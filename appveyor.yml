@@ -1,19 +1,11 @@
 version: '2.0.{build}'
 image: Visual Studio 2019
-init:
-  - cmd: git config --global core.autocrlf true
-before_build:
-    # Display .NET Core version
-    - cmd: dotnet --version
-    #- dotnet restore RedisRetry.sln
-    - cmd: dotnet restore RedisRetry.sln --verbosity m
 build_script:
-    - cmd: dotnet pack -c Release --output ../../artifacts src/RedisRetry/RedisRetry.csproj
+- cmd: >-
+    dotnet --version
+
+    dotnet pack -c Release --output ../../artifacts src/RedisRetry/RedisRetry.csproj
 test_script:
-  - cmd: dotnet test test/RedisRetry.Test/RedisRetry.Test.csproj
+- cmd: dotnet test test/RedisRetry.Test/RedisRetry.Test.csproj
 artifacts:
- - path: 'artifacts\**\*.nupkg'
-   type: NuGetPackage
-skip_commits:
-  files:
-    - '**/*.md'
+- path: artifacts\**\*.nupkg
