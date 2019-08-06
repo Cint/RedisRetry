@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.5;net46;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
     <Company>Cint AB</Company>
     <PackageProjectUrl>https://github.com/Cint/RedisRetry</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/Cint/RedisRetry/blob/master/LICENSE</PackageLicenseUrl>
