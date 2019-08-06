@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
@@ -12,12 +12,12 @@ It provides retry functionality (using Polly) for common Redis commands.</Descri
     <RepositoryUrl>https://github.com/Cint/RedisRetry</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>RedisRetry;Redis;Retry;Polly</PackageTags>
-    <Version>1.1.0</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Polly" Version="5.6.1" />
-    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
+    <PackageReference Include="StackExchange.Redis" Version="2.0.601" />
   </ItemGroup>
 
 </Project>

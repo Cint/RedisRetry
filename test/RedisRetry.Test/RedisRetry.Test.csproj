@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
       <TargetFrameworks>netcoreapp2.0;net462</TargetFrameworks>
@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="moq" Version="4.8.0" />
     <PackageReference Include="shouldly" Version="2.8.3" />
-    <PackageReference Include="stackexchange.redis" Version="1.2.6" />
+    <PackageReference Include="stackexchange.redis" Version="2.0.601" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
