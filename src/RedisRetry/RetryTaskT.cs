@@ -2,6 +2,7 @@
 using Polly;
 using System.Threading.Tasks;
 using StackExchange.Redis;
+using Polly.Retry;
 
 namespace RedisRetry
 {
@@ -11,7 +12,7 @@ namespace RedisRetry
         private static readonly Func<int, TimeSpan> RetryAttemptWaitProvider =
             retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
 
-        private Policy _retryPolicy;
+        private AsyncRetryPolicy _retryPolicy;
 
         public RedisRetryTask(Func<Task<T>> func, int retryCount = 3, Func<int, TimeSpan> waitProvider = null)
         {
